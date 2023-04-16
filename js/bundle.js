@@ -247,7 +247,7 @@ var findParent = function findParent(el, test) {
     }
 };
 
-},{"./circuit":2,"./draw":3,"./editor":4,"./gate":6,"./workspace":10}],2:[function(require,module,exports){
+},{"./circuit":2,"./draw":3,"./editor":4,"./gate":6,"./workspace":11}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -828,6 +828,7 @@ var FILE_VERSION = 1;
 var Application = require('./application');
 var examples = require('./examples');
 var synth = require('./synthesis');
+var truthTable = require('./truthtable');
 
 var displayAmplitudes = function displayAmplitudes(nqubits, amplitudes) {
     var table = document.querySelector('#amplitudes');
@@ -1112,9 +1113,29 @@ window.onload = function () {
         window.alert('Configuration has been successfully updated');
         document.querySelector('#revsynth-config-modal').style.display = 'none';
     };
+
+    var renderTruthTable = function renderTruthTable(linesCount) {
+        var tt = truthTable.renderInput(linesCount);
+        document.querySelector('#synth-exec-tt').innerHTML = tt;
+        document.querySelector('#revsynth-exec-modal').style.display = 'block';
+    };
+
+    document.querySelector('#synth-exec-2').onclick = function (evt) {
+        return renderTruthTable(2);
+    };
+    document.querySelector('#synth-exec-3').onclick = function (evt) {
+        return renderTruthTable(3);
+    };
+    document.querySelector('#synth-exec-4').onclick = function (evt) {
+        return renderTruthTable(4);
+    };
+
+    document.querySelector('#revsynth-exec-modal-close').onclick = function (evt) {
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+    };
 };
 
-},{"./application":1,"./examples":5,"./synthesis":9}],8:[function(require,module,exports){
+},{"./application":1,"./examples":5,"./synthesis":9,"./truthtable":10}],8:[function(require,module,exports){
 "use strict";
 
 var quantum = module.exports;
@@ -1261,6 +1282,41 @@ function getSynthesisConfig() {
 }
 
 },{}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.renderInput = renderInput;
+var inputs = [[0, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1], [1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [1, 1, 0, 1], [1, 1, 1, 0], [1, 1, 1, 1]];
+
+function renderInput(linesCount) {
+    var tableContent = '<tr>';
+
+    for (var lc = 0; lc < linesCount; lc++) {
+        tableContent += '<th>x' + (lc + 1) + '</th>';
+    }
+    for (var _lc = 0; _lc < linesCount; _lc++) {
+        tableContent += '<th>y' + (_lc + 1) + '</th>';
+    }
+    tableContent += '</tr>';
+
+    var rows = Math.pow(2, linesCount);
+
+    for (var inRow = 0; inRow < rows; inRow++) {
+        tableContent += '<tr>';
+
+        for (var inColumn = inputs[0].length - linesCount; inColumn < inputs[0].length; inColumn++) {
+            tableContent += '<td>' + inputs[inRow][inColumn] + '</td>';
+        }
+
+        tableContent += '</tr>';
+    }
+
+    return tableContent;
+}
+
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();

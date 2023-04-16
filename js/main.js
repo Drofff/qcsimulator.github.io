@@ -3,6 +3,7 @@ const FILE_VERSION = 1;
 const Application = require('./application');
 const examples = require('./examples');
 const synth = require('./synthesis');
+const truthTable = require('./truthtable');
 
 const displayAmplitudes = (nqubits, amplitudes) => {
     const table = document.querySelector('#amplitudes');
@@ -283,6 +284,20 @@ window.onload = () => {
 
         window.alert('Configuration has been successfully updated');
         document.querySelector('#revsynth-config-modal').style.display = 'none';
+    };
+
+    const renderTruthTable = (linesCount) => {
+        const tt = truthTable.renderInput(linesCount);
+        document.querySelector('#synth-exec-tt').innerHTML = tt;
+        document.querySelector('#revsynth-exec-modal').style.display = 'block';
+    };
+
+    document.querySelector('#synth-exec-2').onclick = evt => renderTruthTable(2);
+    document.querySelector('#synth-exec-3').onclick = evt => renderTruthTable(3);
+    document.querySelector('#synth-exec-4').onclick = evt => renderTruthTable(4);
+
+    document.querySelector('#revsynth-exec-modal-close').onclick = evt => {
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
     };
 
 };

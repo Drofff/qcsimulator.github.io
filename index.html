@@ -60,9 +60,24 @@
                         </a>
                     </li>
                     <li>
-                        <a id="synth-exec" href="#" title="Execute reversible logic synthesis">
-                            Execute
-                        </a>
+                        <a href="#">Execute</a>
+                        <ul>
+                            <li>
+                                <a id="synth-exec-2" href="#" title="Synthesize reversible logic circuit with 2 input lines">
+                                    2 inputs
+                                </a>
+                            </li>
+                            <li>
+                                <a id="synth-exec-3" href="#" title="Synthesize reversible logic circuit with 3 input lines">
+                                    3 inputs
+                                </a>
+                            </li>
+                            <li>
+                                <a id="synth-exec-4" href="#" title="Synthesize reversible logic circuit with 4 input lines">
+                                    4 inputs
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
@@ -218,9 +233,13 @@
 
     <div id="revsynth-exec-modal">
         <div id="revsynth-exec-modal-inner">
+            <a id="revsynth-exec-modal-close" href="#">X</a>
             <h3>Synthesize a circuit</h3>
             <br>
+            <table id="synth-exec-tt"></table>
+            <br>
             <button 
+                id="submit-synthesis"
                 style="background-color: #aaa; color: white; font-family: 'Courier New', Courier, monospace; border-radius: 10%; width: 100px; font-size: 20px;"
             >Run</button>
         </div>

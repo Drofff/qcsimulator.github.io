@@ -188,6 +188,13 @@ ul.drop li:hover > ul {
     text-decoration: none;
 }
 
+#revsynth-exec-modal-close {
+    position: fixed;
+    margin-left: 280px;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
 #revsynth-exec-modal {
     position: absolute;
     top: 0;
@@ -204,10 +211,27 @@ ul.drop li:hover > ul {
     margin-top: 50px;
     display: inline-block;
     width: 640px;
-    height: 480px;
+    max-height: 780px;
     background-color: white;
     z-index: 901;
     padding: 20px;
     border-radius: 5%;
     font-family: 'Courier New', Courier, monospace;
+}
+
+#synth-exec-tt {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    width: 500px;
+    max-height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#synth-exec-tt, #synth-exec-tt td, #synth-exec-tt th {
+    border: 1px solid black;
+}
+
+#submit-synthesis {
+    margin-top: 20px;
 }

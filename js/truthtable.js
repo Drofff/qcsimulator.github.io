@@ -37,6 +37,10 @@ export function renderInput(linesCount) {
             tableContent += `<td>${inputs[inRow][inColumn]}</td>`;
         }
 
+        for (let inColumn = inputs[0].length - linesCount; inColumn < inputs[0].length; inColumn++) {
+            tableContent += `<td><input type="number" class="tt-input-cell-${linesCount}"></td>`;
+        }
+
         tableContent += '</tr>';
     }
 

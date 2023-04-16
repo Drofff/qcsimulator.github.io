@@ -235,3 +235,24 @@ ul.drop li:hover > ul {
 #submit-synthesis {
     margin-top: 20px;
 }
+
+.tt-input-cell-2 {
+    position: fixed;
+    margin-left: -1px;
+    margin-top: -10px;
+    width: 121px;
+}
+
+.tt-input-cell-3 {
+    position: fixed;
+    margin-left: -1px;
+    margin-top: -10px;
+    width: 79px;
+}
+
+.tt-input-cell-4 {
+    position: fixed;
+    margin-left: -1px;
+    margin-top: -10px;
+    width: 59px;
+}

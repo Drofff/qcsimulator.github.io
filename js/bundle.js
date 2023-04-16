@@ -1310,6 +1310,10 @@ function renderInput(linesCount) {
             tableContent += '<td>' + inputs[inRow][inColumn] + '</td>';
         }
 
+        for (var _inColumn = inputs[0].length - linesCount; _inColumn < inputs[0].length; _inColumn++) {
+            tableContent += '<td><input type="number" class="tt-input-cell-' + linesCount + '"></td>';
+        }
+
         tableContent += '</tr>';
     }
 

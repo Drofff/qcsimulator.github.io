@@ -288,6 +288,7 @@ window.onload = () => {
 
     const renderTruthTable = (linesCount) => {
         const tt = truthTable.renderInput(linesCount);
+        document.querySelector('#synth-lines-count').value = linesCount;
         document.querySelector('#synth-exec-tt').innerHTML = tt;
         document.querySelector('#revsynth-exec-modal').style.display = 'block';
     };
@@ -297,6 +298,26 @@ window.onload = () => {
     document.querySelector('#synth-exec-4').onclick = evt => renderTruthTable(4);
 
     document.querySelector('#revsynth-exec-modal-close').onclick = evt => {
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+    };
+
+    document.querySelector('#submit-synthesis').onclick = evt => {
+        const shouldSubmit = window.confirm('Please make sure you saved your current workspace before proceeding. Synthesis result will replace it');
+        if (!shouldSubmit) {
+            return;
+        }
+
+        let tt;
+        try {
+            tt = truthTable.build(document.querySelector('#synth-lines-count').value);
+        } catch (err) {
+            window.alert(err);
+            return;
+        }
+
+        const res = synth.synthesize(tt);
+        app.loadWorkspace(res);
+
         document.querySelector('#revsynth-exec-modal').style.display = 'none';
     };
 

@@ -1116,6 +1116,7 @@ window.onload = function () {
 
     var renderTruthTable = function renderTruthTable(linesCount) {
         var tt = truthTable.renderInput(linesCount);
+        document.querySelector('#synth-lines-count').value = linesCount;
         document.querySelector('#synth-exec-tt').innerHTML = tt;
         document.querySelector('#revsynth-exec-modal').style.display = 'block';
     };
@@ -1131,6 +1132,26 @@ window.onload = function () {
     };
 
     document.querySelector('#revsynth-exec-modal-close').onclick = function (evt) {
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+    };
+
+    document.querySelector('#submit-synthesis').onclick = function (evt) {
+        var shouldSubmit = window.confirm('Please make sure you saved your current workspace before proceeding. Synthesis result will replace it');
+        if (!shouldSubmit) {
+            return;
+        }
+
+        var tt = void 0;
+        try {
+            tt = truthTable.build(document.querySelector('#synth-lines-count').value);
+        } catch (err) {
+            window.alert(err);
+            return;
+        }
+
+        var res = synth.synthesize(tt);
+        app.loadWorkspace(res);
+
         document.querySelector('#revsynth-exec-modal').style.display = 'none';
     };
 };
@@ -1255,6 +1276,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.updateSynthesisConfig = updateSynthesisConfig;
 exports.getSynthesisConfig = getSynthesisConfig;
+exports.synthesize = synthesize;
 var LOCAL_STORAGE_ITEM_CONFIG = 'synthesis_config';
 
 var DEFAULT_SYNTHESIS_CONFIG = {
@@ -1281,6 +1303,14 @@ function getSynthesisConfig() {
     return JSON.parse(storedConfig);
 }
 
+function synthesize(tt) {
+    return {
+        circuit: [],
+        qubits: tt.in[0].length,
+        input: tt.in[0]
+    };
+}
+
 },{}],10:[function(require,module,exports){
 'use strict';
 
@@ -1288,6 +1318,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.renderInput = renderInput;
+exports.build = build;
 var inputs = [[0, 0, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1], [1, 0, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [1, 1, 0, 1], [1, 1, 1, 0], [1, 1, 1, 1]];
 
 function renderInput(linesCount) {
@@ -1306,18 +1337,53 @@ function renderInput(linesCount) {
     for (var inRow = 0; inRow < rows; inRow++) {
         tableContent += '<tr>';
 
-        for (var inColumn = inputs[0].length - linesCount; inColumn < inputs[0].length; inColumn++) {
+        var columnStart = inputs[0].length - linesCount;
+        for (var inColumn = columnStart; inColumn < inputs[0].length; inColumn++) {
             tableContent += '<td>' + inputs[inRow][inColumn] + '</td>';
         }
 
-        for (var _inColumn = inputs[0].length - linesCount; _inColumn < inputs[0].length; _inColumn++) {
-            tableContent += '<td><input type="number" class="tt-input-cell-' + linesCount + '"></td>';
+        for (var _inColumn = columnStart; _inColumn < inputs[0].length; _inColumn++) {
+            tableContent += '<td><input type="number" class="tt-input-cell-' + linesCount + '" id="synth-in-bit-' + inRow + '-' + (_inColumn - columnStart) + '"></td>';
         }
 
         tableContent += '</tr>';
     }
 
     return tableContent;
+}
+
+function build(linesCount) {
+    if (!linesCount) {
+        throw new Error('Invalid lines count');
+    }
+
+    var ins = [];
+    var rowsCount = Math.pow(2, linesCount);
+    var columnStart = inputs[0].length - linesCount;
+
+    for (var row = 0; row < rowsCount; row++) {
+        var columnValues = [];
+        for (var column = columnStart; column < inputs[0].length; column++) {
+            columnValues.push(inputs[row][column]);
+        }
+
+        ins.push(columnValues);
+    }
+
+    var outs = [];
+    for (var _row = 0; _row < ins.length; _row++) {
+        var _columnValues = [];
+        for (var _column = 0; _column < ins[0].length; _column++) {
+            var out = document.querySelector('#synth-in-bit-' + _row + '-' + _column).value;
+            if (!out) {
+                throw new Error('missing value at y' + (_column + 1) + ' row ' + (_row + 1) + ' (counting rows from 1)');
+            }
+            _columnValues.push(out);
+        }
+        outs.push(_columnValues);
+    }
+
+    return { in: ins, out: outs };
 }
 
 },{}],11:[function(require,module,exports){

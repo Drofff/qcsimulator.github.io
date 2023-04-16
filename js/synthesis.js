@@ -23,3 +23,11 @@ export function getSynthesisConfig() {
 
     return JSON.parse(storedConfig);
 }
+
+export function synthesize(tt) {
+    return {
+        circuit: [],
+        qubits: tt.in[0].length,
+        input: tt.in[0]
+    };
+}

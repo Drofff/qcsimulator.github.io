@@ -177,35 +177,36 @@
     </div>
     <div id="revsynth-config-modal">
         <div id="revsynth-config-modal-inner">
+            <a id="revsynth-config-modal-close" href="#">X</a>
             <h3>Synthesis Configuration</h3>
             <br>
             <div style="text-align: left; margin-left: 20px">
                 <p style="display: inline;">Number of ants:</p>
-                <input type="number" style="display: inline;" name="num_of_ants">
+                <input type="number" style="display: inline;" id="config_num_of_ants">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Number of iterations:</p>
-                <input type="number" style="display: inline;" name="num_of_iterations">
+                <input type="number" style="display: inline;" id="config_num_of_iterations">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Importance of pheromone (alpha):</p>
-                <input type="number" style="display: inline;" name="alpha">
+                <input type="number" style="display: inline;" id="config_alpha">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Importance of visibility (beta):</p>
-                <input type="number" style="display: inline;" name="beta">
+                <input type="number" style="display: inline;" id="config_beta">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Evaporation rate:</p>
-                <input type="number" style="display: inline;" name="evaporation_rate">
+                <input type="number" style="display: inline;" id="config_evaporation_rate">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Ant search loops:</p>
-                <input type="number" style="display: inline;" name="local_loops">
+                <input type="number" style="display: inline;" id="config_local_loops">
             </div>
             <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
                 <p style="display: inline;">Ant search depth:</p>
-                <input type="number" style="display: inline;" name="search_depth">
+                <input type="number" style="display: inline;" id="config_search_depth">
             </div>
             <br><br><br>
             <button style="background-color: #aaa; color: white; font-family: 'Courier New', Courier, monospace; border-radius: 10%; width: 100px; font-size: 20px;">Apply</button>
@@ -215,33 +216,6 @@
     <div id="revsynth-exec-modal">
         <div id="revsynth-exec-modal-inner">
             <h3>Synthesize a circuit</h3>
-            <br>
-            <table style="margin-left: 30px; border: 1px solid black">
-                <tr>
-                    <th>x1</th>
-                    <th>x2</th>
-                    <th>x3</th>
-                    <th>y1</th>
-                    <th>y2</th>
-                    <th>y3</th>
-                </tr>
-                <tr>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                </tr>
-            </table>
             <br>
             <button 
                 style="background-color: #aaa; color: white; font-family: 'Courier New', Courier, monospace; border-radius: 10%; width: 100px; font-size: 20px;"

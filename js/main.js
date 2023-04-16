@@ -2,6 +2,7 @@ const FILE_VERSION = 1;
 
 const Application = require('./application');
 const examples = require('./examples');
+const synth = require('./synthesis');
 
 const displayAmplitudes = (nqubits, amplitudes) => {
     const table = document.querySelector('#amplitudes');
@@ -250,6 +251,23 @@ window.onload = () => {
     document.querySelector('#modal > div').onclick = evt => {
         evt.preventDefault();
         evt.stopPropagation();
+    };
+
+
+    document.querySelector('#synth-config').onclick = evt => {
+        const currentConfig = synth.getSynthesisConfig();
+        document.querySelector('#config_num_of_ants').setAttribute('value', currentConfig.numOfAnts);
+        document.querySelector('#config_num_of_iterations').setAttribute('value', currentConfig.numOfIterations);
+        document.querySelector('#config_alpha').setAttribute('value', currentConfig.alpha);
+        document.querySelector('#config_beta').setAttribute('value', currentConfig.beta);
+        document.querySelector('#config_evaporation_rate').setAttribute('value', currentConfig.evaporationRate);
+        document.querySelector('#config_local_loops').setAttribute('value', currentConfig.localLoops);
+        document.querySelector('#config_search_depth').setAttribute('value', currentConfig.searchDepth);
+
+        document.querySelector('#revsynth-config-modal').style.display = 'block';
+    };
+    document.querySelector('#revsynth-config-modal-close').onclick = evt => {
+        document.querySelector('#revsynth-config-modal').style.display = 'none';
     };
 
 };

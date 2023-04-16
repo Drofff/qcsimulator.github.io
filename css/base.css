@@ -181,6 +181,13 @@ ul.drop li:hover > ul {
     font-family: 'Courier New', Courier, monospace;
 }
 
+#revsynth-config-modal-close {
+    position: fixed;
+    margin-left: 280px;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
 #revsynth-exec-modal {
     position: absolute;
     top: 0;
@@ -190,6 +197,7 @@ ul.drop li:hover > ul {
     background: rgba(0, 0, 0, 0.5);
     z-index: 900;
     text-align: center;
+    display: none;
 }
 
 #revsynth-exec-modal-inner {

@@ -256,17 +256,32 @@ window.onload = () => {
 
     document.querySelector('#synth-config').onclick = evt => {
         const currentConfig = synth.getSynthesisConfig();
-        document.querySelector('#config_num_of_ants').setAttribute('value', currentConfig.numOfAnts);
-        document.querySelector('#config_num_of_iterations').setAttribute('value', currentConfig.numOfIterations);
-        document.querySelector('#config_alpha').setAttribute('value', currentConfig.alpha);
-        document.querySelector('#config_beta').setAttribute('value', currentConfig.beta);
-        document.querySelector('#config_evaporation_rate').setAttribute('value', currentConfig.evaporationRate);
-        document.querySelector('#config_local_loops').setAttribute('value', currentConfig.localLoops);
-        document.querySelector('#config_search_depth').setAttribute('value', currentConfig.searchDepth);
+        document.querySelector('#config_num_of_ants').value = currentConfig.numOfAnts;
+        document.querySelector('#config_num_of_iterations').value = currentConfig.numOfIterations;
+        document.querySelector('#config_alpha').value = currentConfig.alpha;
+        document.querySelector('#config_beta').value = currentConfig.beta;
+        document.querySelector('#config_evaporation_rate').value = currentConfig.evaporationRate;
+        document.querySelector('#config_local_loops').value = currentConfig.localLoops;
+        document.querySelector('#config_search_depth').value = currentConfig.searchDepth;
 
         document.querySelector('#revsynth-config-modal').style.display = 'block';
     };
     document.querySelector('#revsynth-config-modal-close').onclick = evt => {
+        document.querySelector('#revsynth-config-modal').style.display = 'none';
+    };
+    document.querySelector('#submit-synthesis-config').onclick = evt => {
+        const newConfig = {
+            numOfAnts: document.querySelector('#config_num_of_ants').value,
+            numOfIterations: document.querySelector('#config_num_of_iterations').value,
+            alpha: document.querySelector('#config_alpha').value,
+            beta: document.querySelector('#config_beta').value,
+            evaporationRate: document.querySelector('#config_evaporation_rate').value,
+            localLoops: document.querySelector('#config_local_loops').value,
+            searchDepth: document.querySelector('#config_search_depth').value,
+        };
+        synth.updateSynthesisConfig(newConfig);
+
+        window.alert('Configuration has been successfully updated');
         document.querySelector('#revsynth-config-modal').style.display = 'none';
     };
 

@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -247,7 +247,7 @@ var findParent = function findParent(el, test) {
     }
 };
 
-},{"./circuit":2,"./draw":3,"./editor":4,"./gate":6,"./workspace":9}],2:[function(require,module,exports){
+},{"./circuit":2,"./draw":3,"./editor":4,"./gate":6,"./workspace":10}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -827,6 +827,7 @@ var FILE_VERSION = 1;
 
 var Application = require('./application');
 var examples = require('./examples');
+var synth = require('./synthesis');
 
 var displayAmplitudes = function displayAmplitudes(nqubits, amplitudes) {
     var table = document.querySelector('#amplitudes');
@@ -1080,9 +1081,40 @@ window.onload = function () {
         evt.preventDefault();
         evt.stopPropagation();
     };
+
+    document.querySelector('#synth-config').onclick = function (evt) {
+        var currentConfig = synth.getSynthesisConfig();
+        document.querySelector('#config_num_of_ants').value = currentConfig.numOfAnts;
+        document.querySelector('#config_num_of_iterations').value = currentConfig.numOfIterations;
+        document.querySelector('#config_alpha').value = currentConfig.alpha;
+        document.querySelector('#config_beta').value = currentConfig.beta;
+        document.querySelector('#config_evaporation_rate').value = currentConfig.evaporationRate;
+        document.querySelector('#config_local_loops').value = currentConfig.localLoops;
+        document.querySelector('#config_search_depth').value = currentConfig.searchDepth;
+
+        document.querySelector('#revsynth-config-modal').style.display = 'block';
+    };
+    document.querySelector('#revsynth-config-modal-close').onclick = function (evt) {
+        document.querySelector('#revsynth-config-modal').style.display = 'none';
+    };
+    document.querySelector('#submit-synthesis-config').onclick = function (evt) {
+        var newConfig = {
+            numOfAnts: document.querySelector('#config_num_of_ants').value,
+            numOfIterations: document.querySelector('#config_num_of_iterations').value,
+            alpha: document.querySelector('#config_alpha').value,
+            beta: document.querySelector('#config_beta').value,
+            evaporationRate: document.querySelector('#config_evaporation_rate').value,
+            localLoops: document.querySelector('#config_local_loops').value,
+            searchDepth: document.querySelector('#config_search_depth').value
+        };
+        synth.updateSynthesisConfig(newConfig);
+
+        window.alert('Configuration has been successfully updated');
+        document.querySelector('#revsynth-config-modal').style.display = 'none';
+    };
 };
 
-},{"./application":1,"./examples":5}],8:[function(require,module,exports){
+},{"./application":1,"./examples":5,"./synthesis":9}],8:[function(require,module,exports){
 "use strict";
 
 var quantum = module.exports;
@@ -1195,6 +1227,40 @@ quantum.qft = function (nqubits) {
 quantum.srn = new numeric.T(numeric.div([[1, -1], [1, 1]], Math.sqrt(2)), numeric.rep([2, 2], 0));
 
 },{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.updateSynthesisConfig = updateSynthesisConfig;
+exports.getSynthesisConfig = getSynthesisConfig;
+var LOCAL_STORAGE_ITEM_CONFIG = 'synthesis_config';
+
+var DEFAULT_SYNTHESIS_CONFIG = {
+    numOfAnts: 20,
+    numOfIterations: 30,
+    alpha: 2.0,
+    beta: 1.5,
+    evaporationRate: 0.3,
+    localLoops: 4,
+    searchDepth: 6
+};
+
+function updateSynthesisConfig(config) {
+    var configJSON = JSON.stringify(config);
+    window.localStorage.setItem(LOCAL_STORAGE_ITEM_CONFIG, configJSON);
+}
+
+function getSynthesisConfig() {
+    var storedConfig = window.localStorage.getItem(LOCAL_STORAGE_ITEM_CONFIG);
+    if (!storedConfig) {
+        return DEFAULT_SYNTHESIS_CONFIG;
+    }
+
+    return JSON.parse(storedConfig);
+}
+
+},{}],10:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();

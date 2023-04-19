@@ -219,6 +219,30 @@ ul.drop li:hover > ul {
     font-family: 'Courier New', Courier, monospace;
 }
 
+#synth-loading-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+    text-align: center;
+    display: none;
+}
+
+#synth-loading-modal-inner {
+    margin-top: 50px;
+    display: inline-block;
+    width: 640px;
+    height: 280px;
+    background-color: white;
+    z-index: 901;
+    padding: 20px;
+    border-radius: 5%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
 #synth-exec-tt {
     overflow-y: scroll;
     overflow-x: scroll;

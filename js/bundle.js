@@ -1142,6 +1142,9 @@ window.onload = function () {
             return;
         }
 
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+        document.querySelector('#synth-loading-modal').style.display = 'block';
+
         var tt = void 0;
         try {
             tt = truthTable.build(parseInt(document.querySelector('#synth-lines-count').value));
@@ -1153,7 +1156,7 @@ window.onload = function () {
         synth.synthesize(tt, function (res) {
             app.loadWorkspace(res);
 
-            document.querySelector('#revsynth-exec-modal').style.display = 'none';
+            document.querySelector('#synth-loading-modal').style.display = 'none';
         });
     };
 };

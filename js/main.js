@@ -308,6 +308,9 @@ window.onload = () => {
             return;
         }
 
+        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+        document.querySelector('#synth-loading-modal').style.display = 'block';
+
         let tt;
         try {
             tt = truthTable.build(parseInt(document.querySelector('#synth-lines-count').value));
@@ -319,7 +322,7 @@ window.onload = () => {
         synth.synthesize(tt, function(res) {
             app.loadWorkspace(res);
 
-            document.querySelector('#revsynth-exec-modal').style.display = 'none';
+            document.querySelector('#synth-loading-modal').style.display = 'none';
         });
     };
 

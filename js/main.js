@@ -272,13 +272,14 @@ window.onload = () => {
     };
     document.querySelector('#submit-synthesis-config').onclick = evt => {
         const newConfig = {
-            numOfAnts: document.querySelector('#config_num_of_ants').value,
-            numOfIterations: document.querySelector('#config_num_of_iterations').value,
-            alpha: document.querySelector('#config_alpha').value,
-            beta: document.querySelector('#config_beta').value,
-            evaporationRate: document.querySelector('#config_evaporation_rate').value,
-            localLoops: document.querySelector('#config_local_loops').value,
-            searchDepth: document.querySelector('#config_search_depth').value,
+            numOfAnts: parseInt(document.querySelector('#config_num_of_ants').value),
+            numOfIterations: parseInt(document.querySelector('#config_num_of_iterations').value),
+            alpha: parseFloat(document.querySelector('#config_alpha').value),
+            beta: parseFloat(document.querySelector('#config_beta').value),
+            evaporationRate: parseFloat(document.querySelector('#config_evaporation_rate').value),
+            localLoops: parseInt(document.querySelector('#config_local_loops').value),
+            searchDepth: parseInt(document.querySelector('#config_search_depth').value),
+            disableNegativeControl: true,
         };
         synth.updateSynthesisConfig(newConfig);
 
@@ -309,16 +310,17 @@ window.onload = () => {
 
         let tt;
         try {
-            tt = truthTable.build(document.querySelector('#synth-lines-count').value);
+            tt = truthTable.build(parseInt(document.querySelector('#synth-lines-count').value));
         } catch (err) {
             window.alert(err);
             return;
         }
 
-        const res = synth.synthesize(tt);
-        app.loadWorkspace(res);
+        synth.synthesize(tt, function(res) {
+            app.loadWorkspace(res);
 
-        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+            document.querySelector('#revsynth-exec-modal').style.display = 'none';
+        });
     };
 
 };

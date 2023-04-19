@@ -1100,13 +1100,14 @@ window.onload = function () {
     };
     document.querySelector('#submit-synthesis-config').onclick = function (evt) {
         var newConfig = {
-            numOfAnts: document.querySelector('#config_num_of_ants').value,
-            numOfIterations: document.querySelector('#config_num_of_iterations').value,
-            alpha: document.querySelector('#config_alpha').value,
-            beta: document.querySelector('#config_beta').value,
-            evaporationRate: document.querySelector('#config_evaporation_rate').value,
-            localLoops: document.querySelector('#config_local_loops').value,
-            searchDepth: document.querySelector('#config_search_depth').value
+            numOfAnts: parseInt(document.querySelector('#config_num_of_ants').value),
+            numOfIterations: parseInt(document.querySelector('#config_num_of_iterations').value),
+            alpha: parseFloat(document.querySelector('#config_alpha').value),
+            beta: parseFloat(document.querySelector('#config_beta').value),
+            evaporationRate: parseFloat(document.querySelector('#config_evaporation_rate').value),
+            localLoops: parseInt(document.querySelector('#config_local_loops').value),
+            searchDepth: parseInt(document.querySelector('#config_search_depth').value),
+            disableNegativeControl: true
         };
         synth.updateSynthesisConfig(newConfig);
 
@@ -1143,16 +1144,17 @@ window.onload = function () {
 
         var tt = void 0;
         try {
-            tt = truthTable.build(document.querySelector('#synth-lines-count').value);
+            tt = truthTable.build(parseInt(document.querySelector('#synth-lines-count').value));
         } catch (err) {
             window.alert(err);
             return;
         }
 
-        var res = synth.synthesize(tt);
-        app.loadWorkspace(res);
+        synth.synthesize(tt, function (res) {
+            app.loadWorkspace(res);
 
-        document.querySelector('#revsynth-exec-modal').style.display = 'none';
+            document.querySelector('#revsynth-exec-modal').style.display = 'none';
+        });
     };
 };
 
@@ -1286,7 +1288,8 @@ var DEFAULT_SYNTHESIS_CONFIG = {
     beta: 1.5,
     evaporationRate: 0.3,
     localLoops: 4,
-    searchDepth: 6
+    searchDepth: 6,
+    disableNegativeControl: true
 };
 
 function updateSynthesisConfig(config) {
@@ -1303,12 +1306,66 @@ function getSynthesisConfig() {
     return JSON.parse(storedConfig);
 }
 
-function synthesize(tt) {
-    return {
-        circuit: [],
-        qubits: tt.in[0].length,
-        input: tt.in[0]
+function synthesize(tt, onResult) {
+    var conf = getSynthesisConfig();
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8080/api/v1/synth');
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    xhr.onload = function () {
+        if (xhr.status !== 200) {
+            throw new Error('got status ' + xhr.status);
+        }
+
+        var resp = JSON.parse(xhr.responseText);
+
+        window.alert('Successfully synthesized a circuit with ' + resp.errorsCount + ' errors');
+
+        var circuit = [];
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = resp.gates[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var gate = _step.value;
+
+                if (gate.type !== 'toffoli') {
+                    throw new Error('unknown gate type ' + gate.type);
+                }
+                circuit.push({
+                    type: 'x',
+                    time: circuit.length,
+                    targets: gate.targetBits,
+                    controls: gate.controlBits
+                });
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
+        onResult({
+            gates: [],
+            circuit: circuit,
+            qubits: tt.in[0].length,
+            input: tt.in[0]
+        });
     };
+    xhr.send(JSON.stringify({
+        config: conf,
+        target: { inputs: tt.in, outputs: tt.out }
+    }));
 }
 
 },{}],10:[function(require,module,exports){
@@ -1378,7 +1435,7 @@ function build(linesCount) {
             if (!out) {
                 throw new Error('missing value at y' + (_column + 1) + ' row ' + (_row + 1) + ' (counting rows from 1)');
             }
-            _columnValues.push(out);
+            _columnValues.push(parseInt(out));
         }
         outs.push(_columnValues);
     }

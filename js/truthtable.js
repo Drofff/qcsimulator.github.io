@@ -74,7 +74,7 @@ export function build(linesCount) {
             if (!out) {
                 throw new Error(`missing value at y${column+1} row ${row+1} (counting rows from 1)`);
             }
-            columnValues.push(out);
+            columnValues.push(parseInt(out));
         }
         outs.push(columnValues);
     }

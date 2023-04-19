@@ -25,6 +25,16 @@ export function getSynthesisConfig() {
     return JSON.parse(storedConfig);
 }
 
+function mapControlBits(controlBits) {
+    let res = [];
+    for (let i = 0; i < controlBits.length; i++) {
+        if (controlBits[i] === 0) {
+            res.push(i);
+        }
+    }
+    return res;
+}
+
 export function synthesize(tt, onResult) {
     const conf = getSynthesisConfig();
 
@@ -49,7 +59,7 @@ export function synthesize(tt, onResult) {
                 type: 'x',
                 time: circuit.length,
                 targets: gate.targetBits,
-                controls: gate.controlBits,
+                controls: mapControlBits(gate.controlBits),
             });
         }
 

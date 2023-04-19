@@ -1306,6 +1306,16 @@ function getSynthesisConfig() {
     return JSON.parse(storedConfig);
 }
 
+function mapControlBits(controlBits) {
+    var res = [];
+    for (var i = 0; i < controlBits.length; i++) {
+        if (controlBits[i] === 0) {
+            res.push(i);
+        }
+    }
+    return res;
+}
+
 function synthesize(tt, onResult) {
     var conf = getSynthesisConfig();
 
@@ -1337,7 +1347,7 @@ function synthesize(tt, onResult) {
                     type: 'x',
                     time: circuit.length,
                     targets: gate.targetBits,
-                    controls: gate.controlBits
+                    controls: mapControlBits(gate.controlBits)
                 });
             }
         } catch (err) {

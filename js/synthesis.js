@@ -36,6 +36,16 @@ function mapControlBits(controlBits) {
     return res;
 }
 
+function mapGateType(gateType) {
+    if (gateType === 'toffoli' || gateType === 'cnot') {
+        return 'x';
+    }
+    if (gateType === 'fredkin') {
+        return 'swap';
+    }
+    throw new Error('unknown gate type ' + gateType);
+}
+
 export function synthesize(tt, onResult) {
     const conf = getSynthesisConfig();
 
@@ -53,11 +63,8 @@ export function synthesize(tt, onResult) {
 
         let circuit = [];
         for (const gate of resp.gates) {
-            if (gate.type !== 'toffoli') {
-                throw new Error('unknown gate type ' + gate.type);
-            }
             circuit.push({
-                type: 'x',
+                type: mapGateType(gate.type),
                 time: circuit.length,
                 targets: gate.targetBits,
                 controls: mapControlBits(gate.controlBits),

@@ -1322,6 +1322,16 @@ function mapControlBits(controlBits) {
     return res;
 }
 
+function mapGateType(gateType) {
+    if (gateType === 'toffoli' || gateType === 'cnot') {
+        return 'x';
+    }
+    if (gateType === 'fredkin') {
+        return 'swap';
+    }
+    throw new Error('unknown gate type ' + gateType);
+}
+
 function synthesize(tt, onResult) {
     var conf = getSynthesisConfig();
 
@@ -1346,11 +1356,8 @@ function synthesize(tt, onResult) {
             for (var _iterator = resp.gates[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var gate = _step.value;
 
-                if (gate.type !== 'toffoli') {
-                    throw new Error('unknown gate type ' + gate.type);
-                }
                 circuit.push({
-                    type: 'x',
+                    type: mapGateType(gate.type),
                     time: circuit.length,
                     targets: gate.targetBits,
                     controls: mapControlBits(gate.controlBits)

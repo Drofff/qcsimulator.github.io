@@ -223,6 +223,13 @@
                 <p style="display: inline;">Ant search depth:</p>
                 <input type="number" style="display: inline;" id="config_search_depth">
             </div>
+            <div style="text-align: left; margin-left: 20px; margin-top: 20px;">
+                <p style="display: inline;">Base component:</p>
+                <select name="base_gate" id="config_base_gate">
+                    <option value="toffoli">Toffoli gate</option>
+                    <option value="fredkin+cnot">Fredkin gate augmented by CNOT</option>
+                </select>
+            </div>
             <br><br><br>
             <button 
                 id="submit-synthesis-config"

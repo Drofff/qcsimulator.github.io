@@ -9,6 +9,7 @@ const DEFAULT_SYNTHESIS_CONFIG = {
     localLoops: 4,
     searchDepth: 6,
     disableNegativeControl: true,
+    baseGate: 'toffoli',
 };
 
 export function updateSynthesisConfig(config) {

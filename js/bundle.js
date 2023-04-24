@@ -1092,6 +1092,7 @@ window.onload = function () {
         document.querySelector('#config_evaporation_rate').value = currentConfig.evaporationRate;
         document.querySelector('#config_local_loops').value = currentConfig.localLoops;
         document.querySelector('#config_search_depth').value = currentConfig.searchDepth;
+        document.querySelector('#config_base_gate').value = currentConfig.baseGate;
 
         document.querySelector('#revsynth-config-modal').style.display = 'block';
     };
@@ -1107,7 +1108,8 @@ window.onload = function () {
             evaporationRate: parseFloat(document.querySelector('#config_evaporation_rate').value),
             localLoops: parseInt(document.querySelector('#config_local_loops').value),
             searchDepth: parseInt(document.querySelector('#config_search_depth').value),
-            disableNegativeControl: true
+            disableNegativeControl: true,
+            baseGate: document.querySelector('#config_base_gate').value
         };
         synth.updateSynthesisConfig(newConfig);
 
@@ -1292,7 +1294,8 @@ var DEFAULT_SYNTHESIS_CONFIG = {
     evaporationRate: 0.3,
     localLoops: 4,
     searchDepth: 6,
-    disableNegativeControl: true
+    disableNegativeControl: true,
+    baseGate: 'toffoli'
 };
 
 function updateSynthesisConfig(config) {

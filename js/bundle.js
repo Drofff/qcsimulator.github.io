@@ -1323,7 +1323,7 @@ function mapControlBits(controlBits) {
 }
 
 function mapGateType(gateType) {
-    if (gateType === 'toffoli' || gateType === 'cnot') {
+    if (gateType === 'toffoli' || gateType === 'cnot' || gateType === 'not') {
         return 'x';
     }
     if (gateType === 'fredkin') {
